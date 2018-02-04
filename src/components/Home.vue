@@ -1,30 +1,36 @@
 <template>
   <div class="home">
-    <div class="form-container"><!-- TODO: Modulate display of the .form-container using v-show and the showForm variable. -->
+    <div v-show="showForm" class="form-container">
       <h1>Join the Web Developers Club!</h1>
       <p>Sign up to access our special, secret page. Just create an account and answer a brief survey.</p>
 
-      <!-- TODO: Add an HTML element to display an error message for when the user submits invalid information. Use v-show to show/hide this message based on the validity of the form data. -->
+      <p v-show="showError" class="error">There are some errors in the data that you answered! 
+      Please take a look to ensure everything was entered correctly. All fields are required.</p>
+      
+      <form v-on:submit.prevent="validateForm">
 
-      <form><!-- TODO: Add the proper v-on directive to let the validateForm method handle this form when it is submitted -->
+        <p><label for="username">
+          <input type ="text" id="username" v-model="username" placeholder="Enter your username here.">
+        </label></p> 
 
-        <!-- TODO: Add labels for each form field in this form. -->
+        <p><label for="email">
+          <input type ="email" id="email" v-model="email" placeholder="emailaddress@email.com">
+        </label></p>  
 
-        <!-- TODO: Add a username field. -->
+        <p><label for="password">
+          <input type ="password" id="password" v-model="password" placeholder="Enter your password here.">
+        </label></p> 
 
-        <!-- TODO: Add an email field. -->
-
-        <!-- TODO: Add a password field. -->
-
-        <!-- TODO: Add a passwordVerify field. -->
-
+        <p><label for="passwordVerify">
+          <input type ="password" id="passwordVerify" v-model="passwordVerify" placeholder="Just to make sure we got, please enter your password again.">
+        </label></p> 
 
         <p><input type="submit" value="Submit"></p>
       </form>
     </div>
-    <div class="success-message"><!-- TODO: Modulate display of the .success-message using v-show and the showForm variable. -->
+    <div v-show="!showForm" class="success-message">
       <h1>Thank you for signing up!</h1>
-      <p>Please take our new member survey. Click here</p><!-- TODO: Link "Click here" to the survey page. -->
+      <p>Please take our new member survey. <router-link to="Survey">Click here</router-link></p><!-- TODO: Link "Click here" to the survey page. -->
     </div>
   </div>
 </template>
@@ -44,14 +50,16 @@ export default {
   },
   methods: {
     validateForm: function () {
-      // Validate the form by checking the following values:
-      // username must not be blank
-      // email must not be blank
-      // password and passwordVerify must be equal
-      //
-      // When the form is validated, show the .success-message content
-      // If the form is invalid, show the form error message
+      if ((this.username != '') &&
+         (this.email != '') &&
+         (this.password === this.passwordVerify)) {
+        console.log('Form is valid.');
+        this.showForm = false;    
+         } else {
+         console.log('Form NOT vaild!');
+          this.showError = true;  
 
+         }
     }
   }
 }
@@ -60,7 +68,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .error {
-  border: 1px solid #aa0000;
+  border: 3px solid #aa0000;
   padding: 1rem;
   color: #aa0000;
 }
